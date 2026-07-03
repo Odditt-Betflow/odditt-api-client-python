@@ -34,7 +34,7 @@ setup(
     description="Odditt B2B Public API",
     author="OpenAPI Generator community",
     author_email="team@openapitools.org",
-    url="https://github.com/odditt/odditt-api-client-python",
+    url="https://github.com/Odditt-Betflow/odditt-api-client-python",
     keywords=["OpenAPI", "OpenAPI-Generator", "Odditt B2B Public API"],
     install_requires=REQUIRES,
     packages=find_packages(exclude=["test", "tests"]),
