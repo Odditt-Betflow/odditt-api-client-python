@@ -21,3 +21,7 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+
+# Hand-written convenience auth layer (see odditt_api_client/auth_session.py).
+# Preserve on regen; its import lives in odditt_api_client/__init__.py.
+odditt_api_client/auth_session.py

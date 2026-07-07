@@ -49,43 +49,44 @@ Execute `pytest` to run the tests.
 
 Please follow the [installation procedure](#installation--usage) and then run the following:
 
-```python
+You authenticate with **either** an API key **or** OAuth client credentials — you
+do not supply a Bearer token yourself. `AuthSession` exchanges your credential for
+a short-lived Bearer JWT (via `POST /v1/auth/login` or `POST /v1/oauth/login`) and
+transparently refreshes it before it expires. Data endpoints also accept the API
+key directly via the `X-API-Key` header, so no login round-trip is needed for them.
 
-import odditt_api_client
+```python
+from odditt_api_client import AuthSession, AccountApi
 from odditt_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://api.odditt.com
-# See configuration.py for a list of all supported configuration parameters.
-configuration = odditt_api_client.Configuration(
-    host = "https://api.odditt.com"
-)
+# Option A — API key (X-API-Key on data endpoints; auto-login + refresh Bearer
+# for account endpoints):
+session = AuthSession.from_api_key("YOUR_API_KEY")
 
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
+# Option B — OAuth client credentials (auto-refreshed Bearer everywhere):
+# session = AuthSession.from_client_credentials("CLIENT_ID", "CLIENT_SECRET")
 
-# Configure Bearer authorization (JWT): BearerAuth
-configuration = odditt_api_client.Configuration(
-    access_token = os.environ["BEARER_TOKEN"]
-)
-
-
-# Enter a context with an instance of the API client
-with odditt_api_client.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = odditt_api_client.AccountApi(api_client)
-
-    try:
-        # List own API keys
-        api_response = api_instance.v1_account_api_keys_get()
-        print("The response of AccountApi->v1_account_api_keys_get:\n")
-        pprint(api_response)
-    except ApiException as e:
-        print("Exception when calling AccountApi->v1_account_api_keys_get: %s\n" % e)
-
+api_instance = AccountApi(session.api_client)  # Bearer-only endpoint: logs in automatically
+try:
+    api_response = api_instance.v1_account_api_keys_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AccountApi->v1_account_api_keys_get: %s\n" % e)
 ```
+
+<details>
+<summary>Low-level: configuring auth manually</summary>
+
+If you already hold a Bearer token, you can set it directly — but prefer
+`AuthSession`, which handles acquisition and refresh.
+
+```python
+configuration = odditt_api_client.Configuration(host="https://api.odditt.com")
+configuration.api_key["ApiKeyAuth"] = "YOUR_API_KEY"  # X-API-Key
+configuration.access_token = "YOUR_BEARER_TOKEN"
+```
+</details>
 
 ## Documentation for API Endpoints
 

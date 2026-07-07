@@ -154,3 +154,5 @@ from odditt_api_client.models.v1_trends_by_betting_market_position_post_request 
 from odditt_api_client.models.v1_trends_flows_by_id_post_request import V1TrendsFlowsByIdPostRequest as V1TrendsFlowsByIdPostRequest
 from odditt_api_client.models.v1_trends_flows_post_request import V1TrendsFlowsPostRequest as V1TrendsFlowsPostRequest
 
+
+from odditt_api_client.auth_session import AuthSession as AuthSession
