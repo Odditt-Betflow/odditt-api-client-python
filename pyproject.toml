@@ -2,6 +2,7 @@
 name = "odditt_api_client"
 version = "0.1.0"
 description = "Odditt B2B Public API"
+license = "MIT"
 authors = [
   {name = "OpenAPI Generator Community",email = "team@openapitools.org"},
 ]
