@@ -55,24 +55,30 @@ a short-lived Bearer JWT (via `POST /v1/auth/login` or `POST /v1/oauth/login`) a
 transparently refreshes it before it expires. Data endpoints also accept the API
 key directly via the `X-API-Key` header, so no login round-trip is needed for them.
 
+Authenticate with an **API key** (X-API-Key on data endpoints; auto-login +
+refresh Bearer for account endpoints):
+
 ```python
 from odditt_api_client import AuthSession, AccountApi
-from odditt_api_client.rest import ApiException
 from pprint import pprint
 
-# Option A — API key (X-API-Key on data endpoints; auto-login + refresh Bearer
-# for account endpoints):
 session = AuthSession.from_api_key("YOUR_API_KEY")
 
-# Option B — OAuth client credentials (auto-refreshed Bearer everywhere):
-# session = AuthSession.from_client_credentials("CLIENT_ID", "CLIENT_SECRET")
+api_instance = AccountApi(session.api_client)
+pprint(api_instance.v1_account_api_keys_get())
+```
 
-api_instance = AccountApi(session.api_client)  # Bearer-only endpoint: logs in automatically
-try:
-    api_response = api_instance.v1_account_api_keys_get()
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling AccountApi->v1_account_api_keys_get: %s\n" % e)
+Or authenticate with **OAuth client credentials** (auto-refreshed Bearer
+everywhere):
+
+```python
+from odditt_api_client import AuthSession, AccountApi
+from pprint import pprint
+
+session = AuthSession.from_client_credentials("CLIENT_ID", "CLIENT_SECRET")
+
+api_instance = AccountApi(session.api_client)
+pprint(api_instance.v1_account_api_keys_get())
 ```
 
 <details>
